@@ -4,30 +4,26 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 import plotly.graph_objects as go
 
-# Page config
 st.set_page_config(page_title="AI Memory Predictor", page_icon="🧠", layout="centered")
 
-# Load and train model
 @st.cache_resource
 def load_model():
     data = pd.read_csv("memory.csv")
     X = data[['StudyHours', 'SleepHours', 'Revision', 'StressLevel']]
     y = data['Result']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    model = DecisionTreeClassifier()
+    model = DecisionTreeClassifier(max_depth=5, min_samples_split=5)
     model.fit(X_train, y_train)
     accuracy = model.score(X_test, y_test) * 100
     return model, accuracy
 
 model, accuracy = load_model()
 
-# Session state for tracking predictions
 if "remember_count" not in st.session_state:
     st.session_state.remember_count = 0
 if "forget_count" not in st.session_state:
     st.session_state.forget_count = 0
 
-# Login system
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
@@ -56,13 +52,12 @@ else:
     if st.button("Predict", type="primary"):
         result = model.predict([[study, sleep, revision, stress]])
         if result[0] == 1:
-            st.success("Prediction: You will REMEMBER it!")
+            st.success("Prediction: You will REMEMBER it! ✓")
             st.session_state.remember_count += 1
         else:
-            st.error("Prediction: You will FORGET it!")
+            st.error("Prediction: You will FORGET it! ✗")
             st.session_state.forget_count += 1
 
-    # Graphs
     st.subheader("Charts")
     tab1, tab2 = st.tabs(["Accuracy", "Prediction Results"])
 
