@@ -82,6 +82,14 @@ st.markdown("""
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
     
+    .stats-card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        text-align: center;
+    }
+    
     h1, h2, h3 {
         color: #333;
     }
@@ -100,6 +108,10 @@ st.markdown("""
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
+    
+    .stSlider {
+        margin: 15px 0;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -117,62 +129,8 @@ def load_model():
 
 model, accuracy = load_model()
 
-# MCQ Database
+# MCQ Database - 6 CSE Subjects with 5 questions each
 MCQ_DATABASE = {
-    "Machine Learning": [
-        {
-            "question": "What is the primary goal of machine learning?",
-            "options": ["To create algorithms that learn from data", "To manually program all rules", "To store data", "To delete data"],
-            "correct": 0
-        },
-        {
-            "question": "Which algorithm is best for classification?",
-            "options": ["Linear Regression", "K-Means", "Decision Trees", "Principal Component Analysis"],
-            "correct": 2
-        },
-        {
-            "question": "What is overfitting?",
-            "options": ["Model works well on training but poorly on test data", "Model doesn't learn anything", "Using too little data", "Using only one feature"],
-            "correct": 0
-        },
-        {
-            "question": "What does normalization do?",
-            "options": ["Makes data random", "Scales features to a similar range", "Removes outliers", "Increases data size"],
-            "correct": 1
-        },
-        {
-            "question": "What is cross-validation used for?",
-            "options": ["To store data", "To evaluate model performance reliably", "To clean data", "To visualize data"],
-            "correct": 1
-        }
-    ],
-    "Database Management Systems": [
-        {
-            "question": "What does ACID stand for?",
-            "options": ["Availability, Consistency, Integrity, Durability", "Atomicity, Consistency, Isolation, Durability", "Accuracy, Control, Integration, Data", "None of the above"],
-            "correct": 1
-        },
-        {
-            "question": "Which is a NoSQL database?",
-            "options": ["PostgreSQL", "MySQL", "MongoDB", "Oracle"],
-            "correct": 2
-        },
-        {
-            "question": "What is a primary key?",
-            "options": ["A key that opens databases", "A unique identifier for a row", "A password", "A type of encryption"],
-            "correct": 1
-        },
-        {
-            "question": "What does normalization do in databases?",
-            "options": ["Makes data random", "Eliminates redundancy and improves data integrity", "Deletes duplicate data", "Encrypts data"],
-            "correct": 1
-        },
-        {
-            "question": "What is an index in a database?",
-            "options": ["A list of tables", "A structure that improves query speed", "A backup mechanism", "A data type"],
-            "correct": 1
-        }
-    ],
     "Data Structures": [
         {
             "question": "Which data structure uses LIFO principle?",
@@ -198,6 +156,141 @@ MCQ_DATABASE = {
             "question": "Which is NOT a linear data structure?",
             "options": ["Array", "Linked List", "Queue", "Graph"],
             "correct": 3
+        }
+    ],
+    "Database Management Systems": [
+        {
+            "question": "What does ACID stand for?",
+            "options": ["Availability, Consistency, Integrity, Durability", "Atomicity, Consistency, Isolation, Durability", "Accuracy, Control, Integration, Data", "None of the above"],
+            "correct": 1
+        },
+        {
+            "question": "Which is a NoSQL database?",
+            "options": ["PostgreSQL", "MySQL", "MongoDB", "Oracle"],
+            "correct": 2
+        },
+        {
+            "question": "What is a primary key?",
+            "options": ["A key that opens databases", "A unique identifier for a row", "A password", "A type of encryption"],
+            "correct": 1
+        },
+        {
+            "question": "What does normalization do in databases?",
+            "options": ["Makes data random", "Eliminates redundancy and improves data integrity", "Deletes duplicate data", "Encrypts data"],
+            "correct": 1
+        },
+        {
+            "question": "What is a foreign key used for?",
+            "options": ["To open external databases", "To establish relationships between tables", "To encrypt data", "To delete records"],
+            "correct": 1
+        }
+    ],
+    "Operating Systems": [
+        {
+            "question": "What is a process?",
+            "options": ["A program in execution", "A stored procedure", "A system function", "A memory block"],
+            "correct": 0
+        },
+        {
+            "question": "Which of these is a preemptive scheduling algorithm?",
+            "options": ["FCFS", "Round Robin", "Shortest Job First", "Priority Scheduling (non-preemptive)"],
+            "correct": 1
+        },
+        {
+            "question": "What is a deadlock?",
+            "options": ["A system crash", "When processes are blocked waiting for resources", "When memory is full", "When CPU is idle"],
+            "correct": 1
+        },
+        {
+            "question": "What is virtual memory?",
+            "options": ["Simulated memory using hard disk", "Memory in RAM", "Cache memory", "Temporary storage"],
+            "correct": 0
+        },
+        {
+            "question": "What does a mutex do?",
+            "options": ["Multiplies text", "Provides mutual exclusion for shared resources", "Manages memory", "Handles interrupts"],
+            "correct": 1
+        }
+    ],
+    "Computer Networks": [
+        {
+            "question": "Which layer is responsible for routing?",
+            "options": ["Data Link Layer", "Network Layer", "Transport Layer", "Application Layer"],
+            "correct": 1
+        },
+        {
+            "question": "What is the default port for HTTP?",
+            "options": ["25", "53", "80", "443"],
+            "correct": 2
+        },
+        {
+            "question": "What does TCP stand for?",
+            "options": ["Transmission Control Protocol", "Transfer Control Protocol", "Transmission Communication Protocol", "Temporary Connection Protocol"],
+            "correct": 0
+        },
+        {
+            "question": "Which protocol is used for sending emails?",
+            "options": ["FTP", "SMTP", "HTTP", "DNS"],
+            "correct": 1
+        },
+        {
+            "question": "What is the purpose of an IP address?",
+            "options": ["To encrypt data", "To identify a device on a network", "To compress files", "To manage memory"],
+            "correct": 1
+        }
+    ],
+    "Machine Learning": [
+        {
+            "question": "What is the primary goal of machine learning?",
+            "options": ["To create algorithms that learn from data", "To manually program all rules", "To store data", "To delete data"],
+            "correct": 0
+        },
+        {
+            "question": "Which algorithm is best for classification?",
+            "options": ["Linear Regression", "K-Means", "Decision Trees", "Principal Component Analysis"],
+            "correct": 2
+        },
+        {
+            "question": "What is overfitting?",
+            "options": ["Model works well on training but poorly on test data", "Model doesn't learn anything", "Using too little data", "Using only one feature"],
+            "correct": 0
+        },
+        {
+            "question": "What does feature normalization do?",
+            "options": ["Makes data random", "Scales features to a similar range", "Removes outliers", "Increases data size"],
+            "correct": 1
+        },
+        {
+            "question": "What is gradient descent used for?",
+            "options": ["To store data", "To minimize loss function in model training", "To clean data", "To visualize data"],
+            "correct": 1
+        }
+    ],
+    "Web Development": [
+        {
+            "question": "What does HTML stand for?",
+            "options": ["Hyper Text Markup Language", "High Tech Modern Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language"],
+            "correct": 0
+        },
+        {
+            "question": "Which language is used for styling web pages?",
+            "options": ["HTML", "JavaScript", "CSS", "Python"],
+            "correct": 2
+        },
+        {
+            "question": "What is the purpose of JavaScript in web development?",
+            "options": ["To style pages", "To add interactivity and dynamic behavior", "To store databases", "To compile code"],
+            "correct": 1
+        },
+        {
+            "question": "What does REST API stand for?",
+            "options": ["Representational State Transfer Application Programming Interface", "Remote Execution Standard Tool", "Resource Enumeration Simplified Transport", "Request-Execution Service Tool"],
+            "correct": 0
+        },
+        {
+            "question": "Which HTTP method is used to retrieve data?",
+            "options": ["POST", "PUT", "GET", "DELETE"],
+            "correct": 2
         }
     ]
 }
@@ -430,8 +523,9 @@ else:
     # QUIZ TAB
     with tab3:
         st.subheader("Test Your Knowledge & Confidence")
+        st.write("Select a subject and take a 5-question quiz to test your understanding.")
         
-        subject = st.selectbox("Select Subject", list(MCQ_DATABASE.keys()))
+        subject = st.selectbox("Select Subject", list(MCQ_DATABASE.keys()), key="subject_select")
         
         if st.button("Start Quiz", use_container_width=True, type="primary"):
             st.session_state.current_quiz = subject
@@ -442,8 +536,10 @@ else:
             st.markdown("---")
             questions = MCQ_DATABASE[subject]
             
+            st.markdown(f"### {subject} Quiz (5 Questions)")
+            
             for i, q in enumerate(questions):
-                st.markdown(f"### Question {i+1}: {q['question']}")
+                st.markdown(f"**Question {i+1}:** {q['question']}")
                 
                 answer = st.radio(
                     f"Select answer for Q{i+1}",
@@ -454,9 +550,11 @@ else:
                 
                 if answer:
                     st.session_state.quiz_answers[i] = q['options'].index(answer)
+                
+                st.markdown("---")
             
-            col_submit1, col_submit2 = st.columns([1, 1])
-            with col_submit1:
+            col_submit1, col_submit2, col_submit3 = st.columns([1, 2, 1])
+            with col_submit2:
                 if st.button("Submit Quiz", use_container_width=True, type="primary"):
                     correct = sum(1 for i, q in enumerate(questions) if st.session_state.quiz_answers[i] == q['correct'])
                     score = (correct / len(questions)) * 100
@@ -475,12 +573,13 @@ else:
                 </div>
                 """, unsafe_allow_html=True)
                 
+                st.markdown("### Answer Review")
                 questions = MCQ_DATABASE[subject]
                 for i, q in enumerate(questions):
                     if st.session_state.quiz_answers[i] == q['correct']:
-                        st.success(f"Q{i+1}: Correct")
+                        st.success(f"Q{i+1}: Correct - {q['options'][q['correct']]}")
                     else:
-                        st.error(f"Q{i+1}: Incorrect - Correct answer: {q['options'][q['correct']]}")
+                        st.error(f"Q{i+1}: Incorrect - Your answer: {q['options'][st.session_state.quiz_answers[i]]} | Correct answer: {q['options'][q['correct']]}")
     
     # ANALYTICS TAB
     with tab4:
